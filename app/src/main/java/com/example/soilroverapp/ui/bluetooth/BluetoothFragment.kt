@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -22,7 +23,7 @@ import java.util.jar.Manifest
 class BluetoothFragment : Fragment() {
 
     private var _binding: FragmentBluetoothBinding? = null
-    private val PERMISSION_REQUEST_BLUETOOTH = 0
+    private val PERMISSION_REQUEST_BLUETOOTH_CODE = 0
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -43,24 +44,44 @@ class BluetoothFragment : Fragment() {
         bluetoothViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
-        val bluetoothButton: Button = requireView().findViewById(R.id.bluetoothbutton)
-        bluetoothButton.setOnClickListener(){
-            @Override
-            fun onClick() {
-                kobletilBluetooth()
-            }
-        }
+        initializeBluetoothOrRequestPermission()
+
         return root
     }
 
-    private fun kobletilBluetooth(){
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH)){
-
+    private fun initializeBluetoothOrRequestPermission() {
+        val requiredPermissions = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            listOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
+        } else {
+            listOf(android.Manifest.permission.BLUETOOTH_CONNECT, android.Manifest.permission.BLUETOOTH_SCAN)
         }
-        else{
 
+        val missingPermissions = requiredPermissions.filter { permission ->
+            checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED
+        }
+        if (missingPermissions.isEmpty()) {
+            initializeBluetooth()
+        } else {
+            requestPermissions(missingPermissions.toTypedArray(), PERMISSION_REQUEST_BLUETOOTH_CODE)
         }
     }
+
+    private fun initializeBluetooth() { ... }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            PERMISSION_REQUEST_BLUETOOTH_CODE -> {
+                if (grantResults.none { it != PackageManager.PERMISSION_GRANTED }) {
+                    // all permissions are granted
+                    initializeBluetooth()
+                } else {
+                    // some permissions are not granted
+                }
+            }
+            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
