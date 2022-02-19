@@ -1,29 +1,68 @@
 package com.example.soilroverapp.ui.bluetooth
 
-import android.content.pm.PackageManager
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothManager
+import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import com.example.soilroverapp.R
 import com.example.soilroverapp.databinding.FragmentBluetoothBinding
-import java.util.jar.Manifest
+
 
 class BluetoothFragment : Fragment() {
 
+    val bluetoothManager = context?.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
     private var _binding: FragmentBluetoothBinding? = null
-    private val PERMISSION_REQUEST_BLUETOOTH_CODE = 0
+    private val requestPermission =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            // returns Map<String, Boolean> where String represents the
+            // permission requested and boolean represents the
+            // permission granted or not
+            // iterate over each entry of map and take action needed for
+            // each permission requested
+
+            val antall = permissions.size
+            var perm = 0
+            permissions.forEach { actionMap ->
+                if (actionMap.value) {
+                    perm = +1
+                    Log.i("DEBUG", "permission granted")
+                } else {
+                    // if permission denied then check whether never
+                    // ask again is selected or not by making use of
+                    // !ActivityCompat.shouldShowRequest
+                    // PermissionRationale(requireActivity(),
+                    // Manifest.permission.CAMERA)
+                    Log.i("DEBUG", "permission denied")
+                }
+            }
+            if (perm == antall) {
+                if (bluetoothManager.adapter?.isEnabled == false) {
+                    // TODO: Bluetooth not enabled
+                    val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                    //startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+                    //registerForActivityResult()
+                    //Toast.makeText(applicationContext,"Bluetooth er ikke slått på",Toast.LENGTH_SHORT).show();
+                } else {
+                    val bil  = bluetoothManager.adapter?.bondedDevices?.filter { device -> device.name.equals("SoilRover")}?.get(0)
+                }
+            } else {
+                // TODO: permissions not given
+            }
+        }
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -44,42 +83,28 @@ class BluetoothFragment : Fragment() {
         bluetoothViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
-        initializeBluetoothOrRequestPermission()
+        val bluetoothButton: Button = requireView().findViewById(R.id.bluetoothbutton)
+
+        bluetoothButton.setOnClickListener {
+
+            val bluetoothManager =
+                context?.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+            if (bluetoothManager.getAdapter() == null) {
+                // TODO: Bluetooth not available
+                //Toast.makeText(applicationContext,"Bluetooth støttes ikke på enhenten",Toast.LENGTH_SHORT).show();
+            } else {
+                requestPermission.launch(
+                    arrayOf(
+                        android.Manifest.permission.BLUETOOTH,
+                        android.Manifest.permission.BLUETOOTH_ADMIN,
+                        android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                        android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    )
+                )
+            }
+        }
 
         return root
-    }
-
-    private fun initializeBluetoothOrRequestPermission() {
-        val requiredPermissions = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-            listOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
-        } else {
-            listOf(android.Manifest.permission.BLUETOOTH_CONNECT, android.Manifest.permission.BLUETOOTH_SCAN)
-        }
-
-        val missingPermissions = requiredPermissions.filter { permission ->
-            checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED
-        }
-        if (missingPermissions.isEmpty()) {
-            initializeBluetooth()
-        } else {
-            requestPermissions(missingPermissions.toTypedArray(), PERMISSION_REQUEST_BLUETOOTH_CODE)
-        }
-    }
-
-    private fun initializeBluetooth() { ... }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        when (requestCode) {
-            PERMISSION_REQUEST_BLUETOOTH_CODE -> {
-                if (grantResults.none { it != PackageManager.PERMISSION_GRANTED }) {
-                    // all permissions are granted
-                    initializeBluetooth()
-                } else {
-                    // some permissions are not granted
-                }
-            }
-            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        }
     }
 
 
