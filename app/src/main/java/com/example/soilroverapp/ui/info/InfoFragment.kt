@@ -23,7 +23,7 @@ class InfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val infoViewModel =
-            ViewModelProvider(this).get(InfoViewModel::class.java)
+            ViewModelProvider(this)[InfoViewModel::class.java]
 
         _binding = FragmentFjernstyringBinding.inflate(inflater, container, false)
         val root: View = binding.root
