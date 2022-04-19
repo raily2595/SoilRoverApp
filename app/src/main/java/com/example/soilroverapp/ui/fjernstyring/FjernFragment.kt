@@ -1,5 +1,6 @@
 package com.example.soilroverapp.ui.fjernstyring
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,11 +33,18 @@ class FjernFragment : Fragment() {
         fjernstyringViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
+        activity?.apply {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
+
         return root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        activity?.apply {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
     }
 }
