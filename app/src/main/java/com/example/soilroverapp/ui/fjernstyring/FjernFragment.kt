@@ -5,10 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.soilroverapp.databinding.FragmentFjernstyringBinding
+
 
 class FjernFragment : Fragment() {
 
@@ -24,15 +25,11 @@ class FjernFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val fjernstyringViewModel =
-            ViewModelProvider(this).get(FjernstyringViewModel::class.java)
+            ViewModelProvider(this)[FjernstyringViewModel::class.java]
 
         _binding = FragmentFjernstyringBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textFjernstyring
-        fjernstyringViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
         activity?.apply {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
@@ -46,5 +43,15 @@ class FjernFragment : Fragment() {
         activity?.apply {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
     }
 }
