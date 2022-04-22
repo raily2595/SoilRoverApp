@@ -28,10 +28,6 @@ class InfoFragment : Fragment() {
         _binding = FragmentFjernstyringBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textFjernstyring
-        infoViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
         return root
     }
 

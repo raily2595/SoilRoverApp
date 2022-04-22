@@ -4,14 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.example.soilroverapp.databinding.FragmentOmossBinding
+import com.example.soilroverapp.R
+import com.example.soilroverapp.databinding.FragmentManualBinding
+import com.github.barteksc.pdfviewer.PDFView
 
 class OmossFragment : Fragment() {
 
-    private var _binding: FragmentOmossBinding? = null
+    var pdfView: PDFView? = null
+    private var _binding: FragmentManualBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -22,17 +23,13 @@ class OmossFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val omossViewModel =
-            ViewModelProvider(this).get(OmossViewModel::class.java)
+        _binding = FragmentManualBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        _binding = FragmentOmossBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textOmoss
-        omossViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        pdfView = requireView().findViewById(R.id.pdfView1) as PDFView
+        pdfView!!.fromAsset("PM utstilling 2022.pdf").load()
     }
 
     override fun onDestroyView() {
