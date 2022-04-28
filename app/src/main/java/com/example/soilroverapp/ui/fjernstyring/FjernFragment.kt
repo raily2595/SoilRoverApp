@@ -5,20 +5,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.soilroverapp.databinding.FragmentFjernstyringBinding
 
 
+/**
+ * Klasse for å kunne styre kjøretøyet
+ * Orientasjon blir endret til landscape og to joystick blir laget
+ */
 class FjernFragment : Fragment() {
 
     private var _binding: FragmentFjernstyringBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
+    /**
+     * Metode som lager Viewet og endrer til landscape
+     *
+     * @param [LayoutInflater] inflater
+     * @param [ViewGroup] container
+     * @param [Bundle] savedInstanceState
+     * @see [Layout] fragment_fjernstyring
+     * @return root
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,21 +46,15 @@ class FjernFragment : Fragment() {
         return root
     }
 
+    /**
+     * Nytt vindu så endres orientasjon til portrait igjen
+     * Når man velger et nytt vindu fra menyen så endres orientasjoen til portrait
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
         activity?.apply {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
     }
 }
