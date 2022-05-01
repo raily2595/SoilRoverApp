@@ -12,6 +12,7 @@ import com.example.soilroverapp.databinding.FragmentFjernstyringBinding
 
 /**
  * Klasse for å kunne styre kjøretøyet
+ *
  * Orientasjon blir endret til landscape og to joystick blir laget
  */
 class FjernFragment : Fragment() {
@@ -48,6 +49,7 @@ class FjernFragment : Fragment() {
 
     /**
      * Nytt vindu så endres orientasjon til portrait igjen
+     *
      * Når man velger et nytt vindu fra menyen så endres orientasjoen til portrait
      */
     override fun onDestroyView() {

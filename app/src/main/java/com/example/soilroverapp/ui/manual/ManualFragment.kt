@@ -15,8 +15,6 @@ class ManualFragment : Fragment() {
     var pdfView: PDFView? = null
     private var _binding: FragmentManualBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -28,6 +26,13 @@ class ManualFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     *Legger til pdf i View
+     *
+     * Etter at viewed har blitt laget, legges det til en forhåndsbestemt pdf
+     * @param view
+     * @param savedInstanceState
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         pdfView = requireView().findViewById(R.id.pdfView1) as PDFView
         pdfView!!.fromAsset("PM utstilling 2022.pdf").load()
