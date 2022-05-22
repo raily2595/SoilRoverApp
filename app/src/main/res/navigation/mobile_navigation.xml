@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_fjernstyring">
+    app:startDestination="@+id/nav_startside">
 
     <fragment
-        android:id="@+id/nav_fjernstyring"
-        android:name="com.example.soilroverapp.ui.fjernstyring.FjernFragment"
-        android:label="Fjernstyring"
-        tools:layout="@layout/fragment_fjernstyring" />
+        android:id="@+id/nav_startside"
+        android:name="com.example.soilroverapp.ui.startside.StartsideFragment"
+        android:label="Startside"
+        tools:layout="@layout/fragment_startside" />
 
     <fragment
         android:id="@+id/nav_hjulstyring"
@@ -18,26 +18,20 @@
         tools:layout="@layout/fragment_hjulstyring" />
 
     <fragment
-        android:id="@+id/nav_info"
-        android:name="com.example.soilroverapp.ui.info.InfoFragment"
-        android:label="Info"
-        tools:layout="@layout/fragment_info" />
-
-    <fragment
-        android:id="@+id/nav_omoss"
-        android:name="com.example.soilroverapp.ui.omoss.OmossFragment"
-        android:label="Om oss"
-        tools:layout="@layout/fragment_omoss" />
-
-    <fragment
-        android:id="@+id/nav_bluetooth"
-        android:name="com.example.soilroverapp.ui.bluetooth.BluetoothFragment"
-        android:label="Bluetooth"
-        tools:layout="@layout/fragment_bluetooth" />
+        android:id="@+id/nav_fjernstyring"
+        android:name="com.example.soilroverapp.ui.fjernstyring.FjernFragment"
+        android:label="Fjernstyring"
+        tools:layout="@layout/fragment_fjernstyring" />
 
     <fragment
         android:id="@+id/nav_manual"
         android:name="com.example.soilroverapp.ui.manual.ManualFragment"
         android:label="Manual"
         tools:layout="@layout/fragment_manual" />
+
+    <fragment
+        android:id="@+id/nav_omoss"
+        android:name="com.example.soilroverapp.ui.omoss.OmossFragment"
+        android:label="Om oss"
+        tools:layout="@layout/fragment_omoss" />
 </navigation>

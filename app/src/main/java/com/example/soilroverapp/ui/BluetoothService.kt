@@ -15,9 +15,9 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import com.example.soilroverapp.ui.bluetooth.BluetoothFragment
-import com.example.soilroverapp.ui.bluetooth.MESSAGE_READ
-import com.example.soilroverapp.ui.bluetooth.MESSAGE_WRITE
+import com.example.soilroverapp.ui.startside.StartsideFragment
+import com.example.soilroverapp.ui.startside.MESSAGE_READ
+import com.example.soilroverapp.ui.startside.MESSAGE_WRITE
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -26,7 +26,7 @@ class BluetoothService {
     private lateinit var handler: Handler
     public lateinit var bluetoothThread: ConnectedThread
     private lateinit var bluetoothManager: BluetoothManager
-    private lateinit var bluetoothFragment: BluetoothFragment
+    private lateinit var startsideFragment: StartsideFragment
 
     companion object {
         private val instanse: BluetoothService = BluetoothService()
@@ -36,16 +36,16 @@ class BluetoothService {
     }
 
     // requst permissions
-    fun kobleTilBluetooth(bluetooth: BluetoothFragment) {
-        bluetoothFragment = bluetooth
+    fun kobleTilBluetooth(bluetooth: StartsideFragment) {
+        startsideFragment = bluetooth
 
         // get bt manager
         val bluetoothManager =
-            bluetoothFragment.context?.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+            startsideFragment.context?.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         if (bluetoothManager.adapter == null) {
             // TODO: Bluetooth not available
             Toast.makeText(
-                bluetoothFragment.requireContext(),
+                startsideFragment.requireContext(),
                 "Bluetooth støttes ikke på enhenten",
                 Toast.LENGTH_SHORT
             ).show();
@@ -75,11 +75,11 @@ class BluetoothService {
     }
 
     fun permissionRequester(): ActivityResultLauncher<Array<String>> {
-        return bluetoothFragment.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+        return startsideFragment.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
 
             // get bt manager
             bluetoothManager =
-                bluetoothFragment.requireActivity().applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+                startsideFragment.requireActivity().applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
 
             var perm = 0
             permissions.forEach { actionMap ->
@@ -95,7 +95,7 @@ class BluetoothService {
                 if (bluetoothManager.adapter?.isEnabled == false) {
                     // toast metode
                     Toast.makeText(
-                        bluetoothFragment.requireContext(),
+                        startsideFragment.requireContext(),
                         "Bluetooth er ikke slått på",
                         Toast.LENGTH_SHORT
                     ).show();
@@ -106,7 +106,7 @@ class BluetoothService {
                     }?.getOrNull(0)
                     if (bil != null) {
                         Toast.makeText(
-                            bluetoothFragment.requireContext(),
+                            startsideFragment.requireContext(),
                             "hei1",
                             Toast.LENGTH_SHORT
                         ).show()
@@ -114,7 +114,7 @@ class BluetoothService {
                     } else {
                         Log.i("DEBUG", "fant ikke bil!")
                         Toast.makeText(
-                            bluetoothFragment.requireContext(),
+                            startsideFragment.requireContext(),
                             "hei2",
                             Toast.LENGTH_SHORT
                         ).show()
