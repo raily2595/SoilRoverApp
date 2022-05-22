@@ -5,28 +5,24 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_fjernstyring"
+            android:id="@+id/nav_startside"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Fjernstyring" />
+            android:title="Startside" />
         <item
             android:id="@+id/nav_hjulstyring"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Hjulstyring" />
         <item
-            android:id="@+id/nav_info"
+            android:id="@+id/nav_fjernstyring"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Info" />
-        <item
-            android:id="@+id/nav_omoss"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Om oss" />
-        <item
-            android:id="@+id/nav_bluetooth"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Bluetooth" />
+            android:title="Fjernstyring" />
         <item
             android:id="@+id/nav_manual"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Manual" />
+        <item
+            android:id="@+id/nav_omoss"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Om oss" />
     </group>
 </menu>

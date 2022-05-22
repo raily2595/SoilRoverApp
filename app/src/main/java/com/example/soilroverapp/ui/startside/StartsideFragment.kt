@@ -1,4 +1,4 @@
-package com.example.soilroverapp.ui.omoss
+package com.example.soilroverapp.ui.startside
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
@@ -15,8 +15,10 @@ import com.example.soilroverapp.databinding.FragmentFjernstyringBinding
  *
  * Orientasjon blir endret til landscape og to joystick blir laget
  */
-class OmossFragment : Fragment() {
+class StartsideFragment : Fragment() {
 
+    val MESSAGE_READ: Int = 0
+    val MESSAGE_WRITE: Int = 1
     private var _binding: FragmentFjernstyringBinding? = null
     private val binding get() = _binding!!
 
@@ -35,7 +37,7 @@ class OmossFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val fjernstyringViewModel =
-            ViewModelProvider(this)[OmossViewModel::class.java]
+            ViewModelProvider(this)[StartsideViewModel::class.java]
 
         _binding = FragmentFjernstyringBinding.inflate(inflater, container, false)
         val root: View = binding.root
