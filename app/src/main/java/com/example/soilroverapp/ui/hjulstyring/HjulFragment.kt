@@ -28,10 +28,6 @@ class HjulFragment : Fragment() {
         _binding = FragmentHjulstyringBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textHjulstyring
-        hjulstyringViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
         return root
     }
 

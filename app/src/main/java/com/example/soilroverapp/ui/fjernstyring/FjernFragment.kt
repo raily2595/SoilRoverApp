@@ -35,7 +35,7 @@ class FjernFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val fjernstyringViewModel =
-            ViewModelProvider(this)[OmossViewModel::class.java]
+            ViewModelProvider(this)[FjernstyringViewModel::class.java]
 
         _binding = FragmentFjernstyringBinding.inflate(inflater, container, false)
         val root: View = binding.root
