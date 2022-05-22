@@ -1,13 +1,15 @@
 package com.example.soilroverapp.ui.manual
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
+/**
+ * Modell som holder på data for manualfragmentet
+ *
+ * Holder på navnet for fil som er lastet inn i PDF-fremviseren
+ */
 class ManualViewModel : ViewModel() {
-
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is manual Fragment"
+    val pdfFile: MutableLiveData<String> by lazy {
+        MutableLiveData<String>("PM utstilling 2022.pdf")
     }
-    val text: LiveData<String> = _text
 }

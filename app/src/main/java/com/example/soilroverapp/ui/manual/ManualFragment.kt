@@ -5,18 +5,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.soilroverapp.R
 import com.example.soilroverapp.databinding.FragmentManualBinding
+import com.example.soilroverapp.ui.omoss.OmossViewModel
 import com.github.barteksc.pdfviewer.PDFView
 
 
 class ManualFragment : Fragment() {
 
-    var pdfView: PDFView? = null
+    private var pdfView: PDFView? = null
     private var _binding: FragmentManualBinding? = null
-
     private val binding get() = _binding!!
 
+    /**
+     * Skjer når viewet skal til å settes opp
+     *
+     * Setter opp PDF-fremviseren
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -27,17 +34,24 @@ class ManualFragment : Fragment() {
     }
 
     /**
-     *Legger til pdf i View
+     * Skjer når viewet er satt opp
      *
-     * Etter at viewed har blitt laget, legges det til en forhåndsbestemt pdf
-     * @param view
-     * @param savedInstanceState
+     * Setter fremviseren til å vise PDF med filnavnet som ligger i ManualViewModel
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         pdfView = requireView().findViewById(R.id.pdfView1) as PDFView
-        pdfView!!.fromAsset("PM utstilling 2022.pdf").load()
+        val pdfObserver = Observer<String> { pdfFile ->
+            pdfView!!.fromAsset(pdfFile).load()
+        }
+        val manualViewModel = ViewModelProvider(this)[ManualViewModel::class.java]
+        manualViewModel.pdfFile.observe(viewLifecycleOwner, pdfObserver)
     }
 
+    /**
+     * Skjer når viewet skal lukkes
+     *
+     * Nullstiller fremviseren
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
