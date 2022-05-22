@@ -24,7 +24,7 @@ import java.io.OutputStream
 
 class BluetoothService {
     private lateinit var handler: Handler
-    private lateinit var bluetoothThread: ConnectedThread
+    public lateinit var bluetoothThread: ConnectedThread
     private lateinit var bluetoothManager: BluetoothManager
     private lateinit var bluetoothFragment: BluetoothFragment
 
@@ -35,74 +35,14 @@ class BluetoothService {
         }
     }
 
-    fun permissionRequester(): ActivityResultLauncher<Array<String>> {
-        return bluetoothFragment.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            // returns Map<String, Boolean> where String represents the
-            // permission requested and boolean represents the
-            // permission granted or not
-            // iterate over each entry of map and take action needed for
-            // each permission requested
-
-            bluetoothManager =
-                bluetoothFragment.requireActivity().applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-
-            val antall = permissions.size
-            var perm = 0
-            permissions.forEach { actionMap ->
-                if (actionMap.value) {
-                    perm++
-                    Log.i("DEBUG", actionMap.key + " permission granted")
-                } else {
-                    // if permission denied then check whether never
-                    // ask again is selected or not by making use of
-                    // !ActivityCompat.shouldShowRequest
-                    // PermissionRationale(requireActivity(),
-                    // Manifest.permission.CAMERA)
-                    Log.i("DEBUG", "permission denied")
-                }
-            }
-            if (perm == antall) {
-                if (bluetoothManager.adapter?.isEnabled == false) {
-                    // TODO: Bluetooth not enabled
-                    val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-                    //startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
-                    //registerForActivityResult()
-                    Toast.makeText(
-                        bluetoothFragment.requireContext(),
-                        "Bluetooth er ikke slått på",
-                        Toast.LENGTH_SHORT
-                    ).show();
-                } else {
-                    val bil = bluetoothManager.adapter?.bondedDevices?.filter { device ->
-                        device.name.equals("HC-05")
-                    }?.getOrNull(0)
-                    if (bil != null) {
-                        Toast.makeText(
-                            bluetoothFragment.requireContext(),
-                            "hei1",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        ConnectThread(bil).start()
-                    } else {
-                        Log.i("DEBUG", "fant ikke bil!")
-                        Toast.makeText(
-                            bluetoothFragment.requireContext(),
-                            "hei2",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            } else {
-                // TODO: permissions not given
-            }
-        }
-    }
-
+    // requst permissions
     fun kobleTilBluetooth(bluetooth: BluetoothFragment) {
         bluetoothFragment = bluetooth
+
+        // get bt manager
         val bluetoothManager =
             bluetoothFragment.context?.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-        if (bluetoothManager.getAdapter() == null) {
+        if (bluetoothManager.adapter == null) {
             // TODO: Bluetooth not available
             Toast.makeText(
                 bluetoothFragment.requireContext(),
@@ -110,6 +50,7 @@ class BluetoothService {
                 Toast.LENGTH_SHORT
             ).show();
         } else {
+            // noe bedre logikk
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 permissionRequester().launch(
                     arrayOf(
@@ -133,6 +74,60 @@ class BluetoothService {
         }
     }
 
+    fun permissionRequester(): ActivityResultLauncher<Array<String>> {
+        return bluetoothFragment.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+
+            // get bt manager
+            bluetoothManager =
+                bluetoothFragment.requireActivity().applicationContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+
+            var perm = 0
+            permissions.forEach { actionMap ->
+                if (actionMap.value) {
+                    perm++
+                    Log.i("DEBUG", actionMap.key + " permission granted")
+                } else {
+                    // toast
+                    Log.i("DEBUG", "permission denied")
+                }
+            }
+            if (perm == permissions.size) {
+                if (bluetoothManager.adapter?.isEnabled == false) {
+                    // toast metode
+                    Toast.makeText(
+                        bluetoothFragment.requireContext(),
+                        "Bluetooth er ikke slått på",
+                        Toast.LENGTH_SHORT
+                    ).show();
+                } else {
+                    // navn som constant
+                    val bil = bluetoothManager.adapter?.bondedDevices?.filter { device ->
+                        device.name.equals("HC-05")
+                    }?.getOrNull(0)
+                    if (bil != null) {
+                        Toast.makeText(
+                            bluetoothFragment.requireContext(),
+                            "hei1",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        ConnectThread(bil).start()
+                    } else {
+                        Log.i("DEBUG", "fant ikke bil!")
+                        Toast.makeText(
+                            bluetoothFragment.requireContext(),
+                            "hei2",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            } else {
+                // toast
+                // TODO: permissions not given
+            }
+        }
+    }
+
+    // ikke her, men der du skal bruke resultatyet
     fun handleArduinoMsg() {
         handler =
             object : Handler(Looper.getMainLooper()) {
@@ -172,7 +167,7 @@ class BluetoothService {
         }
     }
 
-    private inner class ConnectedThread(private val mmSocket: BluetoothSocket) : Thread() {
+    public inner class ConnectedThread(private val mmSocket: BluetoothSocket) : Thread() {
 
         private val mmInStream: InputStream = mmSocket.inputStream
         private val mmOutStream: OutputStream = mmSocket.outputStream

@@ -52,16 +52,15 @@ class BluetoothFragment : Fragment() {
         val bluetoothButton: Button = requireView().findViewById(R.id.bluetoothbutton)
 
         bluetoothButton.setOnClickListener {
-            val bluetoothservice: BluetoothService = com.example.soilroverapp.ui.BluetoothService.getInstance()
-            bluetoothservice.kobleTilBluetooth(this)
+            BluetoothService.getInstance().kobleTilBluetooth(this)
         }
 
-        //val butt:Button = requireView().findViewById((R.id.button))
+        val butt:Button = requireView().findViewById((R.id.button))
 
-        //butt.setOnClickListener {
-        //    val message: String = "fisk";
-        //    bluetoothThread.write(message)
-        //}
+        butt.setOnClickListener {
+            val message: String = "fisk"
+            BluetoothService.getInstance().bluetoothThread.write(message)
+        }
     }
 
     override fun onDestroyView() {
