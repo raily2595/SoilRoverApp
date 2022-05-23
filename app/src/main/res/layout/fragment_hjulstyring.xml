@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.info.InfoFragment">
+    tools:context=".ui.hjulstyring.HjulFragment">
 
 
     <Button
@@ -12,40 +12,50 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Heis opp"
-        tools:layout_editor_absoluteX="76dp"
-        tools:layout_editor_absoluteY="48dp" />
+        app:layout_constraintBottom_toTopOf="@+id/venstreforanhjul"
+        app:layout_constraintEnd_toStartOf="@+id/button11"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Heis ned"
-        tools:layout_editor_absoluteX="231dp"
-        tools:layout_editor_absoluteY="48dp" />
+        app:layout_constraintBottom_toTopOf="@+id/høyreforanhjul"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button10"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/imageButton"
         android:layout_width="93dp"
         android:layout_height="90dp"
         android:src="@drawable/rundt_knapp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="613dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/venstrebakhjul" />
 
     <ImageButton
         android:id="@+id/imageButton2"
         android:layout_width="91dp"
         android:layout_height="89dp"
         android:src="@drawable/sirkel_knapp"
-        tools:layout_editor_absoluteX="121dp"
-        tools:layout_editor_absoluteY="613dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton3"
+        app:layout_constraintStart_toEndOf="@+id/imageButton"
+        app:layout_constraintTop_toBottomOf="@+id/venstrebakhjul" />
 
     <ImageButton
         android:id="@+id/imageButton3"
         android:layout_width="164dp"
         android:layout_height="91dp"
         android:src="@drawable/lastebil_knapp"
-        tools:layout_editor_absoluteX="231dp"
-        tools:layout_editor_absoluteY="613dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageButton2"
+        app:layout_constraintTop_toBottomOf="@+id/høyrebakhjul" />
 
     <TextView
         android:id="@+id/venstreforanhjul"
@@ -100,7 +110,9 @@
         android:layout_width="107dp"
         android:layout_height="203dp"
         android:src="@drawable/topdownsoilrover"
-        tools:layout_editor_absoluteX="152dp"
-        tools:layout_editor_absoluteY="264dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
